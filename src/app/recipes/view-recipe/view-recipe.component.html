@@ -1,7 +1,11 @@
 
 
-<div *ngIf="recipe; else elseBlock">
-        <h1 class="text-center">{{recipe.name}}</h1>
+<div *ngIf="recipe; else loadingRecipe">
+        <form [formGroup]="form">
+        <h1  class="text-center">
+            <div *ngIf="viewing">{{recipe.name}}</div>
+            <input *ngIf="!viewing" type="text" class="text-center" formControlName="name">
+        </h1>
         <div style="height: 10%">
             <img class="rounded mx-auto d-block mw-100 mh-100" src="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.826.620.suffix/1568222255998.jpeg">
         </div>
@@ -39,7 +43,7 @@
                     <div class="col-md-8 my-3">
                         <h3>Directions</h3>
                         <ul class="list-group">
-                            <li *ngFor="let direction of recipe.directions; let i = index" class="list-group-item"><h4>{{i + 1}}</h4>{{direction.direction}}</li>
+                            <li *ngFor="let direction of recipe.directions; let i = index" class="list-group-item"><h4>{{i + 1}}</h4>{{direction}}</li>
                         </ul>
                     </div>
                 </div>
@@ -53,9 +57,22 @@
                         </div>
                     </div>
         </div>
-
+        </form>
 </div>
-<ng-template #elseBlock>
+<nav class="navbar fixed-bottom navbar-light bg-light">
+        <form [formGroup]="viewingForm">
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="viewing">
+                  <label ngbButtonLabel class="btn-primary">
+                    <input ngbButton type="radio" [value]="true"> View Mode
+                  </label>
+                  <label ngbButtonLabel class="btn-primary">
+                    <input ngbButton type="radio" [value]="false"> Edit Mode
+                  </label>
+                </div>
+              </form>
+              <pre>{{viewing}}</pre>
+</nav>
+<ng-template #loadingRecipe>
     <br>
     <br>
     <br>

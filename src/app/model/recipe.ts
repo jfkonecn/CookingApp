@@ -1,4 +1,3 @@
-import { Direction } from './direction';
 import { Ingredient } from './ingredient';
 
 export class Recipe {
@@ -11,6 +10,6 @@ export class Recipe {
     public yield?: string;
     public ingredients?: Ingredient[];
     public notes?: string[];
-    public directions?: Direction[];
+    public directions?: string[];
     public tags?:string[];
 }

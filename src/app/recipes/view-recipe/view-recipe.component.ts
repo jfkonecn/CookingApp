@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe';
 import { of, Observable } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-view-recipe',
@@ -9,11 +10,20 @@ import { of, Observable } from 'rxjs';
   styleUrls: ['./view-recipe.component.css']
 })
 export class ViewRecipeComponent implements OnInit {
-
+  form: FormGroup;
+  viewingForm: FormGroup;
   recipe : Recipe;
   constructor(
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private fb: FormBuilder) { 
+      this.form = this.fb.group({
+        name: [''],
+      });
+      this.viewingForm = this.fb.group({
+        viewing : true
+      });
+    }
 
   ngOnInit() {
     const name = this.route.snapshot.paramMap.get('name');
@@ -40,21 +50,23 @@ export class ViewRecipeComponent implements OnInit {
         'eat when hot'
       ],
       directions: [
-        {
-          priority: 1,
-          direction: 'Sleep'
-        },
-        {
-          priority: 2,
-          direction: 'Pet Pigs'
-        }
+        'Sleep',
+        'Pet Pigs'
       ],
       tags:[
         'Pigs',
         'Otters'
       ]
     }
+    this.form.setValue({name: name,});
     of(testRecipe).toPromise().then(x => this.recipe = x);
   }
 
+  
+
+  public get viewing() : boolean {
+    return this.viewingForm.value['viewing'];
+  }
+
+  
 }
