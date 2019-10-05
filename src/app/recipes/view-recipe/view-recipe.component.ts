@@ -10,14 +10,14 @@ import { of, Observable } from 'rxjs';
 })
 export class ViewRecipeComponent implements OnInit {
 
-  recipe$ : Observable<Recipe> ;
+  recipe : Recipe;
   constructor(
     private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
     const name = this.route.snapshot.paramMap.get('name');
-    const recipe : Recipe = 
+    const testRecipe : Recipe = 
     {
       name: name,
       level: 'easy',
@@ -26,8 +26,14 @@ export class ViewRecipeComponent implements OnInit {
       cookTime: '20 mins',
       yield: '4 things',
       ingredients: [
-        '5 eggs',
-        '10 things'
+        {
+          type:'string',
+          content:'5 eggs',
+        },
+        {
+          type:'recipeName',
+          content:'some other c',
+        }
       ],
       notes: [
         'eat when hot'
@@ -47,7 +53,7 @@ export class ViewRecipeComponent implements OnInit {
         'Otters'
       ]
     }
-    this.recipe$ = of(recipe);
+    of(testRecipe).toPromise().then(x => this.recipe = x);
   }
 
 }
