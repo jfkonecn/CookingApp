@@ -7,6 +7,7 @@ export class Recipe {
     public prepTime?: string;
     public inactiveTime?: string;
     public cookTime?: string;
+    public totalTime?: string;
     public yield?: string;
     public ingredients?: Ingredient[];
     public notes?: string[];

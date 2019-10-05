@@ -24,6 +24,7 @@ export class ViewRecipeComponent implements OnInit {
       prepTime: '50 mins',
       inactiveTime: '10 mins',
       cookTime: '20 mins',
+      totalTime: '20 mins',
       yield: '4 things',
       ingredients: [
         {

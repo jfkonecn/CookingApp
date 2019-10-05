@@ -2,10 +2,58 @@
 
 <div *ngIf="recipe; else elseBlock">
         <h1 class="text-center">{{recipe.name}}</h1>
-        <div style="height: 500px">
+        <div style="height: 10%">
             <img class="rounded mx-auto d-block mw-100 mh-100" src="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.826.620.suffix/1568222255998.jpeg">
         </div>
+
+        <div class="container my-3">
+            <div class="row my-3">
+                <div class="col-md-4 my-3">
+                    <ul class="list-group">
+                        <li class="list-group-item">Level: <b>{{recipe.level}}</b></li>
+                        <li class="list-group-item">Total Time: <b>{{recipe.totalTime}}</b></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 my-3">
+                    <ul class="list-group">
+                        <li class="list-group-item">Prep Time: <b>{{recipe.prepTime}}</b></li>
+                        <li class="list-group-item">Cook Time: <b>{{recipe.cookTime}}</b></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 my-3">
+                    <ul class="list-group">
+                        <li class="list-group-item">Yield: <b>{{recipe.yield}}</b></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row my-3">
+                    <div class="col-md-4 my-3">
+                        <h3>Ingredients</h3>
+                        <ul class="list-group">
+                            <li *ngFor="let ingredients of recipe.ingredients" [ngSwitch]="ingredients.type" class="list-group-item">
+                                <a *ngSwitchCase="'recipeName'" href="/recipe/{{ingredients.content}}">{{ingredients.content}}</a>
+                                <div *ngSwitchCase="'string'">{{ingredients.content}}</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8 my-3">
+                        <h3>Directions</h3>
+                        <ul class="list-group">
+                            <li *ngFor="let direction of recipe.directions; let i = index" class="list-group-item"><h4>{{i + 1}}</h4>{{direction.direction}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row my-3">
     
+                        <div class="col">
+                            <h3>Notes</h3>
+                            <ul class="list-group">
+                                <li *ngFor="let note of recipe.notes" class="list-group-item">{{note}}</li>
+                            </ul>
+                        </div>
+                    </div>
+        </div>
+
 </div>
 <ng-template #elseBlock>
     <br>
