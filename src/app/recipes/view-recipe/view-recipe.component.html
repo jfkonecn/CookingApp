@@ -1,6 +1,6 @@
 
 
-<div *ngIf="recipe; else loadingRecipe">
+<div *ngIf="form; else loadingRecipe">
         <form [formGroup]="form">
         <h1  class="text-center">
             <div *ngIf="viewing">{{recipe.name}}</div>
@@ -48,13 +48,13 @@
             <div class="row my-3">
                     <div class="col-md-4 my-3">
                         <h3>Ingredients</h3>
-                        <ul class="list-group">
+                        <ul *ngIf="viewing" class="list-group">
                             <li *ngFor="let ingredients of recipe?.ingredients" [ngSwitch]="ingredients.type" class="list-group-item">
                                 <a *ngSwitchCase="'recipeName'" href="/recipe/{{ingredients.content}}">{{ingredients.content}}</a>
                                 <div *ngSwitchCase="'string'">{{ingredients.content}}</div>
                             </li>
                         </ul>
-                        <div formArrayName="ingredients" >
+                        <div *ngIf="!viewing" formArrayName="ingredients" >
                             <div *ngFor="let ingredient of ingredients.controls; let i = index">
                                     <div [formGroupName]="i">
                                             <input placeholder="Username" [formControlName]="'type'">
@@ -66,9 +66,14 @@
                     </div>
                     <div class="col-md-8 my-3">
                         <h3>Directions</h3>
-                        <ul class="list-group">
+                        <ul *ngIf="viewing" class="list-group">
                             <li *ngFor="let direction of recipe.directions; let i = index" class="list-group-item"><h4>{{i + 1}}</h4>{{direction}}</li>
                         </ul>
+                        <div *ngIf="!viewing" formArrayName="directions" >
+                            <div *ngFor="let direction of directions.controls; let i = index">
+                                    <input placeholder="directions" [formControlName]="i">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row my-3">

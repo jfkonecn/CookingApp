@@ -17,31 +17,8 @@ export class ViewRecipeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder) { 
-      this.form = this.fb.group({
-        name: null,
-        level: null,
-        prepTime: null,
-        inactiveTime: null,
-        cookTime: null,
-        totalTime: null,
-        yield: null,
-        ingredients: this.fb.array([
-          this.fb.group({
-            type: this.fb.control(''),
-            content: this.fb.control(''),
-          }),
-          this.fb.group({
-            type: this.fb.control(''),
-            content: this.fb.control(''),
-          })
-        ]),
-        notes: this.fb.array([
-          this.fb.control(''),
-        ]),
-        // directions: this.fb.array([]),
-      });
       this.viewingForm = this.fb.group({
-        viewing : true
+        viewing: true
       });
     }
 
@@ -78,6 +55,69 @@ export class ViewRecipeComponent implements OnInit {
         'Otters'
       ]
     }
+
+    of(testRecipe).toPromise().then(x => {
+      this.CreateForm(x);
+      this.recipe = x;
+    });
+  }
+
+  
+
+  public get viewing() : boolean {
+    return this.viewingForm.value['viewing'];
+  }
+
+  public get ingredients() {
+    return this.form.get('ingredients') as FormArray;
+  }
+
+  public addIngredient() {
+    this.ingredients.push(this.fb.group({
+      type: this.fb.control(''),
+      content: this.fb.control(''),
+    }));
+  }
+
+  public get directions() {
+    return this.form.get('directions') as FormArray;
+  }
+
+  public addDirection() {
+    this.directions.push(this.fb.control(''));
+  }
+
+  public get notes() {
+    return this.form.get('notes') as FormArray;
+  }
+  
+  public addNote() {
+    this.notes.push(this.fb.control(''));
+  }
+
+  private CreateForm(recipe : Recipe) {
+    this.form = this.fb.group({
+      name: null,
+      level: null,
+      prepTime: null,
+      inactiveTime: null,
+      cookTime: null,
+      totalTime: null,
+      yield: null,
+      ingredients: this.fb.array([]),
+      directions: this.fb.array([]),
+      notes: this.fb.array([]),
+    });
+    recipe.ingredients.forEach(ingredient => {
+      this.addIngredient();
+    });
+    recipe.directions.forEach(direction => {
+      this.addDirection();
+    });
+    recipe.notes.forEach(note => {
+      this.addNote();
+    });
+    // this.form.setValue(recipe);
     this.form.setValue({
       name: null,
       level: null,
@@ -96,22 +136,14 @@ export class ViewRecipeComponent implements OnInit {
           content:'some other c',
         }
       ],
+      directions: [
+        'Sleep',
+        'Pet Pigs'
+      ],
       notes: [
         'hello'
       ],
     });
-    of(testRecipe).toPromise().then(x => this.recipe = x);
   }
-
   
-
-  public get viewing() : boolean {
-    return this.viewingForm.value['viewing'];
-  }
-  public get ingredients() {
-    return this.form.get('ingredients') as FormArray;
-  }
-  public get notes() {
-    return this.form.get('notes') as FormArray;
-  }
 }
