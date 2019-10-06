@@ -13,6 +13,8 @@ export class ViewRecipeComponent implements OnInit {
   form: FormGroup;
   viewingForm: FormGroup;
   recipe : Recipe;
+  allRecipes : Recipe[];
+  ingredientTypes: string[];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -35,11 +37,11 @@ export class ViewRecipeComponent implements OnInit {
       yield: '4 things',
       ingredients: [
         {
-          type:'string',
+          type:'Text',
           content:'5 eggs',
         },
         {
-          type:'recipeName',
+          type:'Recipe Name',
           content:'some other c',
         }
       ],
@@ -55,7 +57,15 @@ export class ViewRecipeComponent implements OnInit {
         'Otters'
       ]
     }
-
+    this.ingredientTypes = [
+      'Text',
+      'Recipe Name'
+    ];
+    this.allRecipes = [
+      { name: 'Something' },
+      { name: 'Anything' },
+      { name: 'some other c' },
+    ];
     of(testRecipe).toPromise().then(x => {
       this.CreateForm(x);
       this.recipe = x;
@@ -128,11 +138,11 @@ export class ViewRecipeComponent implements OnInit {
       yield: null,
       ingredients: [
         {
-          type:'string',
+          type:'Text',
           content:'5 eggs',
         },
         {
-          type:'recipeName',
+          type:'Recipe Name',
           content:'some other c',
         }
       ],

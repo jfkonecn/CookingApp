@@ -46,25 +46,45 @@
                 </div>
             </div>
             <div class="row my-3">
-                    <div class="col-md-4 my-3">
+                    <div class="col-md-6 my-3">
                         <h3>Ingredients</h3>
-                        <ul *ngIf="viewing" class="list-group">
-                            <li *ngFor="let ingredients of recipe?.ingredients" [ngSwitch]="ingredients.type" class="list-group-item">
-                                <a *ngSwitchCase="'recipeName'" href="/recipe/{{ingredients.content}}">{{ingredients.content}}</a>
-                                <div *ngSwitchCase="'string'">{{ingredients.content}}</div>
-                            </li>
-                        </ul>
-                        <div *ngIf="!viewing" formArrayName="ingredients" >
-                            <div *ngFor="let ingredient of ingredients.controls; let i = index">
-                                    <div [formGroupName]="i">
-                                            <input placeholder="Username" [formControlName]="'type'">
-                                            <input placeholder="Password" [formControlName]="'content'">
-                                        </div>
-                            </div>
-
-                        </div>
+                        <table class="table table-striped">
+                                <thead *ngIf="!viewing">
+                                <tr>
+                                  <th scope="col">Type</th>
+                                  <th scope="col">Content</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let ingredient of recipe?.ingredients; let i = index" formArrayName="ingredients" >
+                                    <ng-container [formGroupName]="i">
+                                            <td *ngIf="!viewing">
+                                                    <select  formControlName="type">
+                                                        <option *ngFor="let type of ingredientTypes" [ngValue]="type">
+                                                            {{type}}
+                                                        </option>
+                                                    </select>  
+                                            </td>
+                                            <td >
+                                                <div *ngIf="viewing" [ngSwitch]="ingredient.type" >
+                                                            <a *ngSwitchCase="'Recipe Name'" href="/recipe/{{ingredient.content}}">{{ingredient.content}}</a>
+                                                            <div *ngSwitchCase="'Text'">{{ingredient.content}}</div>
+                                                </div>
+                                                <div *ngIf="!viewing" [ngSwitch]="ingredient.type" >
+                                                    <select  *ngSwitchCase="'Recipe Name'" [formControlName]="'content'">
+                                                        <option *ngFor="let recipe of allRecipes" [ngValue]="recipe.name">
+                                                            {{recipe.name}}
+                                                        </option>
+                                                    </select> 
+                                                    <input *ngSwitchCase="'Text'" placeholder="ingredient" [formControlName]="'content'">
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </tbody>
+                            </table>
                     </div>
-                    <div class="col-md-8 my-3">
+                    <div class="col-md-6 my-3">
                         <h3>Directions</h3>
                         <ul *ngIf="viewing" class="list-group">
                             <li *ngFor="let direction of recipe.directions; let i = index" class="list-group-item"><h4>{{i + 1}}</h4>{{direction}}</li>
