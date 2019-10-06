@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe';
 import { of, Observable } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-view-recipe',
@@ -18,7 +18,27 @@ export class ViewRecipeComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder) { 
       this.form = this.fb.group({
-        name: [''],
+        name: null,
+        level: null,
+        prepTime: null,
+        inactiveTime: null,
+        cookTime: null,
+        totalTime: null,
+        yield: null,
+        ingredients: this.fb.array([
+          this.fb.group({
+            type: this.fb.control(''),
+            content: this.fb.control(''),
+          }),
+          this.fb.group({
+            type: this.fb.control(''),
+            content: this.fb.control(''),
+          })
+        ]),
+        notes: this.fb.array([
+          this.fb.control(''),
+        ]),
+        // directions: this.fb.array([]),
       });
       this.viewingForm = this.fb.group({
         viewing : true
@@ -58,7 +78,28 @@ export class ViewRecipeComponent implements OnInit {
         'Otters'
       ]
     }
-    this.form.setValue({name: name,});
+    this.form.setValue({
+      name: null,
+      level: null,
+      prepTime: null,
+      inactiveTime: null,
+      cookTime: null,
+      totalTime: null,
+      yield: null,
+      ingredients: [
+        {
+          type:'string',
+          content:'5 eggs',
+        },
+        {
+          type:'recipeName',
+          content:'some other c',
+        }
+      ],
+      notes: [
+        'hello'
+      ],
+    });
     of(testRecipe).toPromise().then(x => this.recipe = x);
   }
 
@@ -67,6 +108,10 @@ export class ViewRecipeComponent implements OnInit {
   public get viewing() : boolean {
     return this.viewingForm.value['viewing'];
   }
-
-  
+  public get ingredients() {
+    return this.form.get('ingredients') as FormArray;
+  }
+  public get notes() {
+    return this.form.get('notes') as FormArray;
+  }
 }

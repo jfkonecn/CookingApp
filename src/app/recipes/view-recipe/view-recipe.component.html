@@ -4,7 +4,7 @@
         <form [formGroup]="form">
         <h1  class="text-center">
             <div *ngIf="viewing">{{recipe.name}}</div>
-            <input *ngIf="!viewing" type="text" class="text-center" formControlName="name">
+            <input *ngIf="!viewing" placeholder="Name" type="text" class="text-center" formControlName="name">
         </h1>
         <div style="height: 10%">
             <img class="rounded mx-auto d-block mw-100 mh-100" src="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.826.620.suffix/1568222255998.jpeg">
@@ -14,19 +14,34 @@
             <div class="row my-3">
                 <div class="col-md-4 my-3">
                     <ul class="list-group">
-                        <li class="list-group-item">Level: <b>{{recipe.level}}</b></li>
-                        <li class="list-group-item">Total Time: <b>{{recipe.totalTime}}</b></li>
+                        <li class="list-group-item">Level: 
+                            <b *ngIf="viewing">{{recipe.level}}</b>
+                            <input *ngIf="!viewing" type="text" formControlName="level">
+                        </li>
+                        <li class="list-group-item">Total Time: 
+                            <b *ngIf="viewing">{{recipe.totalTime}}</b>
+                            <input *ngIf="!viewing" type="text" formControlName="totalTime">
+                        </li>
                     </ul>
                 </div>
                 <div class="col-md-4 my-3">
                     <ul class="list-group">
-                        <li class="list-group-item">Prep Time: <b>{{recipe.prepTime}}</b></li>
-                        <li class="list-group-item">Cook Time: <b>{{recipe.cookTime}}</b></li>
+                        <li class="list-group-item">Prep Time: 
+                            <b *ngIf="viewing">{{recipe.prepTime}}</b>
+                            <input *ngIf="!viewing" type="text" formControlName="prepTime">
+                        </li>
+                        <li class="list-group-item">Cook Time: 
+                            <b *ngIf="viewing">{{recipe.cookTime}}</b>
+                            <input *ngIf="!viewing" type="text" formControlName="cookTime">
+                        </li>
                     </ul>
                 </div>
                 <div class="col-md-4 my-3">
                     <ul class="list-group">
-                        <li class="list-group-item">Yield: <b>{{recipe.yield}}</b></li>
+                        <li class="list-group-item">Yield: 
+                            <b *ngIf="viewing">{{recipe.yield}}</b>
+                            <input *ngIf="!viewing" type="text" formControlName="yield">
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -34,11 +49,20 @@
                     <div class="col-md-4 my-3">
                         <h3>Ingredients</h3>
                         <ul class="list-group">
-                            <li *ngFor="let ingredients of recipe.ingredients" [ngSwitch]="ingredients.type" class="list-group-item">
+                            <li *ngFor="let ingredients of recipe?.ingredients" [ngSwitch]="ingredients.type" class="list-group-item">
                                 <a *ngSwitchCase="'recipeName'" href="/recipe/{{ingredients.content}}">{{ingredients.content}}</a>
                                 <div *ngSwitchCase="'string'">{{ingredients.content}}</div>
                             </li>
                         </ul>
+                        <div formArrayName="ingredients" >
+                            <div *ngFor="let ingredient of ingredients.controls; let i = index">
+                                    <div [formGroupName]="i">
+                                            <input placeholder="Username" [formControlName]="'type'">
+                                            <input placeholder="Password" [formControlName]="'content'">
+                                        </div>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="col-md-8 my-3">
                         <h3>Directions</h3>
@@ -51,15 +75,24 @@
     
                         <div class="col">
                             <h3>Notes</h3>
-                            <ul class="list-group">
+                            <ul *ngIf="viewing" class="list-group">
                                 <li *ngFor="let note of recipe.notes" class="list-group-item">{{note}}</li>
                             </ul>
+                            <div *ngIf="!viewing" formArrayName="notes" >
+                                <div *ngFor="let note of notes.controls; let i = index">
+                                        <input placeholder="Notes" [formControlName]="i">
+   
+                                </div>
+
+                            </div>
                         </div>
                     </div>
         </div>
         </form>
 </div>
-<nav class="navbar fixed-bottom navbar-light bg-light">
+<br>
+<br>
+<nav class="navbar fixed-bottom bg-light">
         <form [formGroup]="viewingForm">
                 <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="viewing">
                   <label ngbButtonLabel class="btn-primary">
@@ -70,7 +103,6 @@
                   </label>
                 </div>
               </form>
-              <pre>{{viewing}}</pre>
 </nav>
 <ng-template #loadingRecipe>
     <br>
